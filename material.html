@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+    <title>4 - MATERIAL</title>
+    <style rel="stylesheet" href="Style.css"></style>
+    <script src="three.min.js"></script>
+
+</head>
+<body>
+
+</body>
+</html>
+<script>
+    let scene, camera, renderer , transparentcube , normalmesh , normals , depthmesh;
+
+    let createTransparentCube = function(){
+        let geometry = new THREE.BoxGeometry(1,1,1);
+        let material = new THREE.MeshBasicMaterial({color:0xff0040,transparent : true, opacity:0.8});
+        transparentcube = new THREE.Mesh(geometry,material);
+        scene.add(transparentcube); 
+    }
+
+
+    let createNormalMesh = function(){
+        let geometry = new THREE.BoxGeometry(1,1,1);
+        let material = new THREE.MeshNormalMaterial();
+        normalmesh = new THREE.Mesh(geometry,material);
+        //normals = new THREE.FaceNormalsHelper(normalmesh,5);
+        normalmesh.position.x = 1;
+        normalmesh.position.y = 1;
+        scene.add(normalmesh);
+    }
+
+
+    let createDepthMesh = function()
+    {
+        let geometry = new THREE.BoxGeometry(1,1,1);
+        let material = new THREE.MeshDepthMaterial();
+        depthmesh = new THREE.Mesh(geometry,material);
+        //normals = new THREE.FaceNormalsHelper(normalmesh,5);
+        depthmesh.position.x = 1;
+        depthmesh.position.y = 1;
+        scene.add(depthmesh);
+    }   
+
+ 
+
+    //set up the environment -
+
+    //initialieze scene, camera, objects and renderer
+    let init = function(){
+        // create the scene
+        scene  = new THREE.Scene();
+        scene.background = new THREE.Color(0xababab);
+
+        //create and locate the camera
+        camera = new THREE.PerspectiveCamera(30,window.innerWidth/window.innerHeight,1,1000);
+        camera.position.z = 5;
+
+        //createTransparentCube();
+        //createNormalMesh();
+        createDepthMesh();
+
+        //create the renderer
+        renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+
+        document.body.appendChild(renderer.domElement);
+    };
+
+    //main animation loop - calls 50-60 times in a second
+
+    let mainloop = function(){
+        console.log("hello");
+        renderer.render(scene, camera);
+        requestAnimationFrame(mainloop);
+    };
+
+
+    init();
+    mainloop();
+    
+</script>
