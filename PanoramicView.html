@@ -1,0 +1,93 @@
+
+<html>
+    <head>
+        <title>Panoramic View</title>
+        <script src = "three.min.js"></script>       
+    </head>
+    <body>
+    </body> 
+</html>
+
+<script>    
+    let scene, camera, renderer, sphere, target, texture;
+    let ADD = 0.005, theta = 0;
+    
+    let createGeometry = function() {
+        //texture = new THREE.TextureLoader().load( 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Kanchenjunga_India.jpg/1280px-Kanchenjunga_India.jpg');
+        
+        // Image is courtesy of CC BY-SA 2.5, https://commons.wikimedia.org/w/index.php?curid=267091 
+
+        texture = new THREE.TextureLoader().load( 'https://upload.wikimedia.org/wikipedia/commons/2/26/Clouds_from_the_sky.jpg');
+    
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(2, 4);
+        
+        let material =  new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+                    
+        let geometry = new THREE.SphereGeometry(5, 100, 100);
+       
+        sphere = new THREE.Mesh(geometry, material);
+         
+        scene.add(sphere); 
+        
+    };
+    
+    
+    // set up the environment - 
+    // initiallize scene, camera, objects and renderer
+    let init = function() {
+        // create the scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+        
+        // create an locate the camera
+        camera = new THREE.PerspectiveCamera(70, 
+                        window.innerWidth / window.innerHeight, 
+                        1, 1000);
+        
+        target = new THREE.Object3D();
+        camera.lookAt(target.position);
+ 
+        createGeometry();
+        
+        // create the renderer   
+        renderer = new THREE.WebGLRenderer({antialiasing: true});   
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        
+    };
+   
+    
+    // main animation loop - calls 50-60 times per second.
+    let mainLoop = function() {
+        target.position.x = 10 * Math.sin(theta);
+        target.position.z = 10 * Math.cos(theta);
+        theta += ADD;
+        camera.lookAt(target.position);
+        renderer.render(scene, camera);
+        requestAnimationFrame(mainLoop);
+    };
+    
+    ///////////////////////////////////////////////
+    init();
+    mainLoop();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</script>
+
+
+       
